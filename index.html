@@ -132,9 +132,6 @@
         .tele-btn:active {
             transform: translateY(1px);
         }
-        .icon-tg {
-            font-size: 1.5rem;
-        }
 
         .btn-secondary {
             background: linear-gradient(95deg, #8B6B00 0%, #C99B1A 50%, #F5C542 100%);
@@ -315,17 +312,17 @@
         </div>
         <div class="tagline"><span>🏆 XAUUSD • EURUSD • GBPUSD • USDJPY 🏆</span></div>
         
-        <!-- FIRST JOIN BUTTON - DEEP LINK (RUN OPTION) -->
+        <!-- FIRST JOIN BUTTON -->
         <div class="btn-wrap">
-            <a id="joinBtnTop" href="tg://resolve?domain=+o0SzybYk4O1kYjll" target="_blank" class="tele-btn" data-button-name="Join Button Primary (Below Name)" data-position="first_under_name">
-                🚀 RUN TELEGRAM APP
+            <a id="joinBtnTop" href="https://t.me/+o0SzybYk4O1kYjll" target="_blank" class="tele-btn" data-button-name="Join Button Primary (Below Name)" data-position="first_under_name">
+                🚀 JOIN TELEGRAM CHANNEL
             </a>
         </div>
         
-        <!-- SECOND JOIN BUTTON - DEEP LINK + FALLBACK -->
+        <!-- SECOND JOIN BUTTON -->
         <div class="bottom-btn">
-            <a id="joinBtnBottom" href="tg://resolve?domain=+o0SzybYk4O1kYjll" target="_blank" class="tele-btn btn-secondary" data-button-name="Join Button Secondary (Gold Forex)" data-position="second_under_name">
-                ⚡ OPEN IN TELEGRAM → JOIN NOW
+            <a id="joinBtnBottom" href="https://t.me/+o0SzybYk4O1kYjll" target="_blank" class="tele-btn btn-secondary" data-button-name="Join Button Secondary (Gold Forex)" data-position="second_under_name">
+                ⚡ GET FREE FOREX SIGNALS → JOIN NOW
             </a>
         </div>
         
@@ -358,13 +355,6 @@
             </div>
         </div>
         
-        <!-- FALLBACK: Agar deep link kaam na kare toh manual join -->
-        <div style="text-align:center; margin-top: 10px;">
-            <a href="https://t.me/+o0SzybYk4O1kYjll" target="_blank" style="color: #80C0FF; font-size: 0.7rem; text-decoration: none; border-bottom: 1px dashed #2C74C0; padding-bottom: 2px;">
-                🔗 Telegram Web par open karein (अगर app ना खुले)
-            </a>
-        </div>
-        
         <div class="footer-credit">
             🔐 Instant Access • 5000+ Active Forex Traders • Daily Free Setups <br>
             © GOLD FOREX VIP SIGNALS — Your Trusted Forex Navigator
@@ -379,13 +369,12 @@
     // ============================================================
     // PIXEL ID: 3527691954067345
     // CHANNEL: GOLD FOREX VIP SIGNALS
-    // TELEGRAM DEEP LINK: tg://resolve?domain=+o0SzybYk4O1kYjll
-    // FALLBACK: https://t.me/+o0SzybYk4O1kYjll
+    // TELEGRAM LINK: https://t.me/+o0SzybYk4O1kYjll
+    // ONLY 2 BUTTONS - NO RUN/DEEP LINK
     // ============================================================
     (function() {
         const CONFIG = {
-            TELEGRAM_DEEP_LINK: 'tg://resolve?domain=+o0SzybYk4O1kYjll',
-            TELEGRAM_WEB_LINK: 'https://t.me/+o0SzybYk4O1kYjll',
+            TELEGRAM_LINK: 'https://t.me/+o0SzybYk4O1kYjll',
             TELEGRAM_CODE: 'o0SzybYk4O1kYjll',
             PIXEL_ID: '3527691954067345',
             CHANNEL_NAME: 'GOLD_FOREX_VIP_SIGNALS',
@@ -414,11 +403,12 @@
             const eventTime = new Date().toISOString();
             const deviceType = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent) ? 'mobile' : 'desktop';
             
+            // 1. LEAD event
             fbq('track', 'Lead', {
                 content_name: buttonName,
                 content_category: 'Telegram_Channel_Join_Gold_Forex',
                 button_position: position,
-                method: 'Telegram_DeepLink',
+                method: 'Telegram_Redirect',
                 currency: 'USD',
                 value: 0.01,
                 channel: CONFIG.CHANNEL_NAME,
@@ -428,6 +418,7 @@
                 telegram_code: CONFIG.TELEGRAM_CODE
             });
             
+            // 2. CompleteRegistration Event
             fbq('track', 'CompleteRegistration', {
                 registration_method: 'Telegram_Join_Button',
                 content_name: 'GOLD_FOREX_VIP_SIGNALS',
@@ -438,6 +429,7 @@
                 telegram_code: CONFIG.TELEGRAM_CODE
             });
             
+            // 3. Contact Event
             fbq('track', 'Contact', {
                 contact_method: 'Telegram_Channel',
                 content_name: 'Gold_Forex_VIP_Telegram_Join',
@@ -446,6 +438,7 @@
                 telegram_code: CONFIG.TELEGRAM_CODE
             });
             
+            // 4. CustomEvent
             fbq('trackCustom', 'GoldForexTelegramJoin', {
                 button_name: buttonName,
                 button_label: buttonName,
@@ -457,9 +450,10 @@
                 pixel_id: CONFIG.PIXEL_ID,
                 source: 'gold_forex_vip_landing',
                 telegram_code: CONFIG.TELEGRAM_CODE,
-                telegram_deep_link: CONFIG.TELEGRAM_DEEP_LINK
+                telegram_link: CONFIG.TELEGRAM_LINK
             });
             
+            // 5. InitiateContact Event
             fbq('track', 'InitiateContact', {
                 contact_method: 'Telegram_Channel_Join',
                 content_name: 'Gold_Forex_VIP_Telegram',
@@ -474,19 +468,18 @@
             showToastMessage(`✅ Joined! Events tracked (${CONFIG.PIXEL_ID})`, 1500);
         }
         
-        // Setup button with tracking - DEEP LINK
+        // Setup button with tracking
         function setupButtonWithTracking(button, defaultName, defaultPosition) {
             if (!button) return null;
             let buttonName = button.getAttribute('data-button-name') || defaultName;
             let position = button.getAttribute('data-position') || defaultPosition;
+            const originalHref = CONFIG.TELEGRAM_LINK;
             
             const newBtn = button.cloneNode(true);
             if (button.parentNode) {
                 button.parentNode.replaceChild(newBtn, button);
             }
-            
-            // DEEP LINK pe set karo
-            newBtn.setAttribute('href', CONFIG.TELEGRAM_DEEP_LINK);
+            newBtn.setAttribute('href', originalHref);
             newBtn.setAttribute('target', '_blank');
             newBtn.setAttribute('rel', 'noopener noreferrer');
             
@@ -499,10 +492,8 @@
                 const targetUrl = this.href;
                 e.preventDefault();
                 
-                // Tracking fire karo
                 fireAllTrackingEvents(newBtn, buttonName, position);
                 
-                // Deep link open karo
                 setTimeout(function() {
                     if (targetUrl && targetUrl !== '#') {
                         window.open(targetUrl, '_blank');
@@ -530,24 +521,28 @@
             if (!scroll25 && percent >= 25) {
                 if (typeof fbq === 'function') {
                     fbq('track', 'ScrollDepth', { depth: '25%', page: 'gold_forex_landing', expert: CONFIG.EXPERT_NAME, pixel_id: CONFIG.PIXEL_ID });
+                    fbq('trackCustom', 'EngagementScroll', { percent: 25, channel: CONFIG.CHANNEL_NAME, expert: CONFIG.EXPERT_NAME, pixel_id: CONFIG.PIXEL_ID });
                 }
                 scroll25 = true;
             }
             if (!scroll50 && percent >= 50) {
                 if (typeof fbq === 'function') {
                     fbq('track', 'ScrollDepth', { depth: '50%', page: 'gold_forex_landing', expert: CONFIG.EXPERT_NAME, pixel_id: CONFIG.PIXEL_ID });
+                    fbq('trackCustom', 'EngagementScroll', { percent: 50, channel: CONFIG.CHANNEL_NAME, expert: CONFIG.EXPERT_NAME, pixel_id: CONFIG.PIXEL_ID });
                 }
                 scroll50 = true;
             }
             if (!scroll75 && percent >= 75) {
                 if (typeof fbq === 'function') {
                     fbq('track', 'ScrollDepth', { depth: '75%', page: 'gold_forex_landing', expert: CONFIG.EXPERT_NAME, pixel_id: CONFIG.PIXEL_ID });
+                    fbq('trackCustom', 'EngagementScroll', { percent: 75, channel: CONFIG.CHANNEL_NAME, expert: CONFIG.EXPERT_NAME, pixel_id: CONFIG.PIXEL_ID });
                 }
                 scroll75 = true;
             }
             if (!scroll100 && percent >= 99) {
                 if (typeof fbq === 'function') {
                     fbq('track', 'ScrollDepth', { depth: '100%', page: 'gold_forex_landing', expert: CONFIG.EXPERT_NAME, pixel_id: CONFIG.PIXEL_ID });
+                    fbq('trackCustom', 'EngagementScroll', { percent: 100, channel: CONFIG.CHANNEL_NAME, expert: CONFIG.EXPERT_NAME, pixel_id: CONFIG.PIXEL_ID });
                 }
                 scroll100 = true;
             }
@@ -565,12 +560,13 @@
                 telegram_code: CONFIG.TELEGRAM_CODE
             });
             fbq('trackCustom', 'LandingPageViewed_GoldForex', {
-                version: '8.0_DeepLink',
-                telegram_deep_link: CONFIG.TELEGRAM_DEEP_LINK,
+                version: '9.0_Final_TwoButtons',
+                telegram_link: CONFIG.TELEGRAM_LINK,
+                telegram_code: CONFIG.TELEGRAM_CODE,
                 expert: CONFIG.EXPERT_NAME,
                 pixel_id: CONFIG.PIXEL_ID
             });
-            console.log(`[Pixel ${CONFIG.PIXEL_ID}] ViewContent tracked. Deep Link: ${CONFIG.TELEGRAM_DEEP_LINK}`);
+            console.log(`[Pixel ${CONFIG.PIXEL_ID}] ViewContent tracked. Link: ${CONFIG.TELEGRAM_LINK}`);
         }
         
         // ========== TIME ON PAGE ==========
@@ -621,13 +617,73 @@
             });
         }
         
-        // ========== CONSOLE STATUS ==========
-        console.log('%c🏆 GOLD FOREX VIP SIGNALS | DEEP LINK ACTIVATED 🏆', 'color: #FFD700; font-weight: bold; font-size: 15px;');
+        // ========== HOVER INTENT ==========
+        const hoverTracked = { top: false, bottom: false };
+        document.body.addEventListener('mouseover', function(e) {
+            const target = e.target.closest('.tele-btn');
+            if (target && target.id === 'joinBtnTop' && !hoverTracked.top) {
+                hoverTracked.top = true;
+                if (typeof fbq === 'function') {
+                    fbq('trackCustom', 'ButtonHoverIntent', { button_position: 'First_Join_Button', action: 'hover', expert: CONFIG.EXPERT_NAME, pixel_id: CONFIG.PIXEL_ID });
+                }
+            }
+            if (target && target.id === 'joinBtnBottom' && !hoverTracked.bottom) {
+                hoverTracked.bottom = true;
+                if (typeof fbq === 'function') {
+                    fbq('trackCustom', 'ButtonHoverIntent', { button_position: 'Second_Join_Button', action: 'hover', expert: CONFIG.EXPERT_NAME, pixel_id: CONFIG.PIXEL_ID });
+                }
+            }
+        });
+        
+        // ========== GLOBAL DELEGATION ==========
+        document.body.addEventListener('click', function(e) {
+            const anchor = e.target.closest('a');
+            if (anchor && anchor.href && anchor.href.includes('t.me/+o0SzybYk4O1kYjll')) {
+                if (!anchor.hasAttribute('data-telegram-tracked-final')) {
+                    let dynamicName = anchor.innerText.trim().slice(0, 50) || 'Telegram_Link_Gold_Forex';
+                    if (typeof fbq === 'function') {
+                        fbq('track', 'Lead', {
+                            content_name: dynamicName,
+                            content_category: 'dynamic_telegram_gold_forex',
+                            expert: CONFIG.EXPERT_NAME,
+                            pixel_id: CONFIG.PIXEL_ID,
+                            telegram_code: CONFIG.TELEGRAM_CODE
+                        });
+                        fbq('trackCustom', 'GoldForexTelegramJoin', {
+                            button_name: dynamicName,
+                            expert: CONFIG.EXPERT_NAME,
+                            pixel_id: CONFIG.PIXEL_ID,
+                            telegram_code: CONFIG.TELEGRAM_CODE
+                        });
+                    }
+                    anchor.setAttribute('data-telegram-tracked-final', 'true');
+                }
+            }
+        });
+        
+        // ========== RE-FIRE PAGEVIEW ==========
+        if (typeof fbq === 'function') {
+            setTimeout(function() {
+                fbq('track', 'PageView', {
+                    revisit_confirmation: true,
+                    theme: 'premium_dark_gold',
+                    tracking_status: 'active',
+                    expert: CONFIG.EXPERT_NAME,
+                    pixel_id: CONFIG.PIXEL_ID,
+                    telegram_code: CONFIG.TELEGRAM_CODE
+                });
+            }, 500);
+        }
+        
+        // ========== CONSOLE ==========
+        console.log('%c🏆 GOLD FOREX VIP SIGNALS | FINAL VERSION 🏆', 'color: #FFD700; font-weight: bold; font-size: 15px;');
         console.log(`✅ Expert: ${CONFIG.EXPERT_NAME}`);
         console.log(`✅ Pixel ID: ${CONFIG.PIXEL_ID}`);
-        console.log(`✅ Deep Link: ${CONFIG.TELEGRAM_DEEP_LINK}`);
-        console.log(`✅ Web Link: ${CONFIG.TELEGRAM_WEB_LINK}`);
-        console.log('✅ RUN / OPEN option added — directly opens Telegram app');
+        console.log(`✅ Telegram Link: ${CONFIG.TELEGRAM_LINK}`);
+        console.log(`✅ Telegram Code: ${CONFIG.TELEGRAM_CODE}`);
+        console.log('✅ Total Buttons: 2 (NO RUN/DEEP LINK)');
+        console.log('✅ Events: Lead, CompleteRegistration, Contact, InitiateContact, CustomEvent');
+        console.log('✅ Additional: ScrollDepth, TimeOnPage, ButtonImpression, HoverIntent');
         
         window.goldForexPixelHelper = {
             config: () => console.log('Pixel Config:', CONFIG),
@@ -641,7 +697,7 @@
                 console.log('📊 Status:');
                 console.log(`  Pixel Ready: ${typeof fbq === 'function' ? '✅' : '❌'}`);
                 console.log(`  Pixel ID: ${CONFIG.PIXEL_ID}`);
-                console.log(`  Deep Link: ${CONFIG.TELEGRAM_DEEP_LINK}`);
+                console.log(`  Link: ${CONFIG.TELEGRAM_LINK}`);
             }
         };
         console.log('💡 Debug: type "goldForexPixelHelper.status()"');
@@ -654,6 +710,9 @@
     <img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=3527691954067345&ev=Lead&noscript=1"/>
     <img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=3527691954067345&ev=CompleteRegistration&noscript=1"/>
     <img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=3527691954067345&ev=Contact&noscript=1"/>
+    <img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=3527691954067345&ev=InitiateContact&noscript=1"/>
+    <img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=3527691954067345&ev=CustomEvent&noscript=1"/>
+    <img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=3527691954067345&ev=ViewContent&noscript=1"/>
 </noscript>
 
 </body>
